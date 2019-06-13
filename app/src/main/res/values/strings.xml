@@ -9,4 +9,13 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="first_name"><i>First name</i></string>
+    <string name="last_name"><i>Last name</i></string>
+    <string name="company_name"><i>Company name</i></string>
+    <string name="email_address"><i>Email address</i></string>
+    <string name="purpose"><i>Purpose</i></string>
+    <string name="arrival_date"><i>Arrival date</i></string>
+    <string name="departure_date"><i>Departure date</i></string>
+    <string name="register_confirmation">By filling out this form and clicking register, you agree to our privacy policy.</string>
+    <string name="register">Register</string>
 </resources>

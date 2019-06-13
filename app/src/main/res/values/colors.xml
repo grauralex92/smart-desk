@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">@color/endava_orange</color>
+    <color name="colorPrimaryDark">@color/endava_dark_orange</color>
+    <color name="colorAccent">@color/endava_light_orange</color>
+    <color name="endava_orange">#DE411B</color>
+    <color name="endava_dark_orange">#C83A30</color>
+    <color name="endava_light_orange">#E47327</color>
+    <color name="endava_grey">#50585A</color>
+
+    <color name="gradient_background_start_color">#4b354c</color>
+    <color name="gradient_background_center_color">#212b51</color>
+    <color name="gradient_background_end_color">#151f43</color>
 </resources>

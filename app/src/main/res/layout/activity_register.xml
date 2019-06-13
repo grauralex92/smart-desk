@@ -4,101 +4,150 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:padding="20dp"
+    android:background="@drawable/background_color"
     tools:context=".RegisterActivity">
 
-    <EditText
-        android:id="@+id/first_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:hint="First name"
-        android:imeOptions="actionNext"
-        android:inputType="textCapWords"
-        android:nextFocusForward="@+id/last_name"
-        app:layout_constraintEnd_toStartOf="@id/last_name"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/last_name"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:hint="Last name"
-        android:inputType="textCapWords"
-        android:nextFocusDown="@id/company_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/first_name"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/company_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Company name"
-        android:inputType="textCapWords"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/first_name" />
-
-    <EditText
-        android:id="@+id/email_address"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Email address"
-        android:inputType="textEmailAddress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/company_name" />
-
-    <EditText
-        android:id="@+id/purpose"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Purpose"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/email_address" />
-
-    <EditText
-        android:id="@+id/arrival_date"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="8dp"
-        android:hint="Arrival date"
-        android:imeOptions="actionNext"
-        android:inputType="date"
-        app:layout_constraintEnd_toStartOf="@id/departure_date"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/purpose" />
-
-    <EditText
-        android:id="@+id/departure_date"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:hint="Departure date"
-        android:inputType="date"
+        android:background="#33000000"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/arrival_date"
-        app:layout_constraintTop_toBottomOf="@+id/purpose" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <EditText
+            android:id="@+id/first_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/registration_field_background"
+            android:hint="@string/first_name"
+            android:imeOptions="actionNext"
+            android:inputType="textCapWords"
+            android:nextFocusForward="@+id/last_name"
+            android:padding="8dp"
+            android:textColor="@color/endava_orange"
+            android:textColorHint="@color/endava_light_orange"
+            app:layout_constraintEnd_toStartOf="@id/last_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/last_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/registration_field_background"
+            android:hint="@string/last_name"
+            android:inputType="textCapWords"
+            android:nextFocusDown="@id/company_name"
+            android:padding="8dp"
+            android:textColor="@color/endava_orange"
+            android:textColorHint="@color/endava_light_orange"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/first_name"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/company_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/registration_field_background"
+            android:hint="@string/company_name"
+            android:inputType="textCapWords"
+            android:padding="8dp"
+            android:textColor="@color/endava_orange"
+            android:textColorHint="@color/endava_light_orange"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/first_name" />
+
+        <EditText
+            android:id="@+id/email_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/registration_field_background"
+            android:hint="@string/email_address"
+            android:inputType="textEmailAddress"
+            android:padding="8dp"
+            android:textColor="@color/endava_orange"
+            android:textColorHint="@color/endava_light_orange"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/company_name" />
+
+        <EditText
+            android:id="@+id/purpose"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/registration_field_background"
+            android:hint="@string/purpose"
+            android:inputType="text"
+            android:padding="8dp"
+            android:textColor="@color/endava_orange"
+            android:textColorHint="@color/endava_light_orange"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/email_address" />
+
+        <EditText
+            android:id="@+id/arrival_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/registration_field_background"
+            android:hint="@string/arrival_date"
+            android:imeOptions="actionNext"
+            android:inputType="date"
+            android:padding="8dp"
+            android:textColor="@color/endava_orange"
+            android:textColorHint="@color/endava_light_orange"
+            app:layout_constraintEnd_toStartOf="@id/departure_date"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/purpose" />
+
+        <EditText
+            android:id="@+id/departure_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/registration_field_background"
+            android:hint="@string/departure_date"
+            android:inputType="date"
+            android:padding="8dp"
+            android:textColor="@color/endava_orange"
+            android:textColorHint="@color/endava_light_orange"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/arrival_date"
+            app:layout_constraintTop_toBottomOf="@+id/purpose" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/privacy_policy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="By filling out this form and clicking register, you agree to our privacy policy."
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/arrival_date" />
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:paddingStart="4dp"
+        android:text="@string/register_confirmation"
+        android:textColor="@color/endava_light_orange"
+        android:textStyle="italic"
+        app:layout_constraintStart_toStartOf="@+id/constraintLayout"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
     <Button
         android:id="@+id/register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Register"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/register_button"
+        android:minWidth="280dp"
+        android:text="@string/register"
+        android:textColor="@color/endava_light_orange"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/privacy_policy" />
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

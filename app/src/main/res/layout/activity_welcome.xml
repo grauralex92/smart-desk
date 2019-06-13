@@ -11,36 +11,38 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
-        tools:src="@color/colorAccent" />
+        android:src="@drawable/front_desk_background" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintStart_toStartOf="@+id/welcome_background_image_view"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.42">
 
         <Button
             android:id="@+id/register_now_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:background="@android:color/white"
-            android:minWidth="200dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/parallelogram_shape"
+            android:minWidth="240dp"
             android:text="Register now"
-            android:textColor="@color/colorPrimary" />
+            android:textColor="@color/endava_light_orange" />
 
         <Button
-            android:id="@+id/already_registered"
+            android:id="@+id/already_registered_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="4dp"
-            android:background="@android:color/white"
-            android:minWidth="200dp"
+            android:background="@drawable/parallelogram_shape"
+            android:minWidth="240dp"
             android:text="Already registered"
-            android:textColor="@color/colorPrimary" />
+            android:textColor="@color/endava_light_orange" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
