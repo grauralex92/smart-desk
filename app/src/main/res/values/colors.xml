@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#DE411B</color>
+    <color name="colorPrimaryDark">#C83A30</color>
+    <color name="colorAccent">#50585A</color>
+    <color name="endava_light_orange">#E47327</color>
+    <color name="input_background">#0D111111</color>
+    <color name="hint_color">#7f7f7f</color>
 </resources>
