@@ -10,7 +10,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/register_now_view"
-        android:layout_width="400dp"
+        android:layout_width="@dimen/welcome_activity_main_views_width"
         android:layout_height="0dp"
         android:background="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -31,7 +31,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/already_registered_view"
-        android:layout_width="400dp"
+        android:layout_width="@dimen/welcome_activity_main_views_width"
         android:layout_height="0dp"
         android:background="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -52,7 +52,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rightView"
-        android:layout_width="320dp"
+        android:layout_width="@dimen/welcome_activity_side_views_width"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -62,7 +62,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/leftView"
-        android:layout_width="320dp"
+        android:layout_width="@dimen/welcome_activity_side_views_width"
         android:layout_height="0dp"
         android:background="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -82,10 +82,10 @@
         <include
             android:id="@+id/already_registered_menu"
             layout="@layout/already_registered_side_menu"
-            android:layout_width="280dp"
+            android:layout_width="@dimen/welcome_activity_side_layouts_width"
             android:layout_height="match_parent"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="@dimen/welcome_activity_side_layouts_margins"
+            android:layout_marginEnd="@dimen/welcome_activity_side_layouts_margins"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -106,10 +106,10 @@
         <include
             android:id="@+id/register_now_menu"
             layout="@layout/register_now_side_menu"
-            android:layout_width="280dp"
+            android:layout_width="@dimen/welcome_activity_side_layouts_width"
             android:layout_height="match_parent"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="@dimen/welcome_activity_side_layouts_margins"
+            android:layout_marginEnd="@dimen/welcome_activity_side_layouts_margins"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -119,10 +119,10 @@
 
     <ImageView
         android:id="@+id/smart_desk_logo"
-        android:layout_width="150dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="@dimen/smart_desk_logo_width"
+        android:layout_height="@dimen/smart_desk_logo_height"
+        android:layout_marginStart="@dimen/smart_desk_logo_margins"
+        android:layout_marginTop="@dimen/smart_desk_logo_margins"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/smart_desk_logo" />

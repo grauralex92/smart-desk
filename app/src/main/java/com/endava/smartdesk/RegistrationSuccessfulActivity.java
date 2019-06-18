@@ -19,13 +19,13 @@ public class RegistrationSuccessfulActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         mHandler.postDelayed(() -> showWelcomeScreen(), ACTIVITY_LENGTH);
     }
 
     @Override
-    protected void onPause(){
+    protected void onPause() {
         super.onPause();
         mHandler.removeCallbacksAndMessages(null);
     }
