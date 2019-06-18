@@ -145,19 +145,19 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void onAlreadyRegisteredButtonClick() {
-        moveSideView(mScreenWidthInDp / 3 * 2);
-        moveRegisterNowView(0, -mScreenWidthInDp / 12 * 2);
-        moveAlreadyRegisteredView(400, -mScreenWidthInDp / 12 * 2);
-        moveLeftInfo(125, -140);
-        moveRightInfo(500, -140);
+        moveSideView(1000, mScreenWidthInDp / 3 * 2);
+        moveRegisterNowView(500, 0, -mScreenWidthInDp / 12 * 2);
+        moveAlreadyRegisteredView(500, 500, -mScreenWidthInDp / 12 * 2);
+        moveLeftInfo(400, 125, -140);
+        moveRightInfo(400, 500, -140);
     }
 
     private void onRegisterNowButtonClick() {
-        moveSideView(-mScreenWidthInDp / 3 * 2);
-        moveRegisterNowView(400, mScreenWidthInDp / 12 * 2);
-        moveAlreadyRegisteredView(0, mScreenWidthInDp / 12 * 2);
-        moveLeftInfo(500, 140);
-        moveRightInfo(125, 140);
+        moveSideView(1000, -mScreenWidthInDp / 3 * 2);
+        moveRegisterNowView(500, 500, mScreenWidthInDp / 12 * 2);
+        moveAlreadyRegisteredView(500, 0, mScreenWidthInDp / 12 * 2);
+        moveLeftInfo(400, 500, 140);
+        moveRightInfo(400, 125, 140);
     }
 
     private void initViews() {
@@ -189,7 +189,7 @@ public class WelcomeActivity extends AppCompatActivity {
         mPurpose.getText().clear();
         mArrivalDate.getText().clear();
         mDepartureDate.getText().clear();
-        mRegisterButton.setText(getResources().getString(R.string.get_signature));
+        mRegisterButton.setText(getResources().getString(R.string.register_button_text));
         mSignature.setImageDrawable(null);
         isUserSigned = false;
     }
@@ -235,11 +235,11 @@ public class WelcomeActivity extends AppCompatActivity {
         mRightInfo.animate().translationX(140).start();
     }
 
-    private void moveRegisterNowView(int delay, float x) {
+    private void moveRegisterNowView(int duration, int delay, float x) {
         final Handler handler = new Handler();
         handler.postDelayed(() -> mRegisterNowView.animate()
                 .translationXBy(x)
-                .setDuration(400)
+                .setDuration(duration)
                 .setListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animation) {
@@ -272,11 +272,11 @@ public class WelcomeActivity extends AppCompatActivity {
                 .start(), delay);
     }
 
-    private void moveAlreadyRegisteredView(int delay, float x) {
+    private void moveAlreadyRegisteredView(int duration, int delay, float x) {
         final Handler handler = new Handler();
         handler.postDelayed(() -> mAlreadyRegisteredView.animate()
                 .translationXBy(x * 2)
-                .setDuration(400)
+                .setDuration(duration)
                 .setListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animation) {
@@ -304,11 +304,11 @@ public class WelcomeActivity extends AppCompatActivity {
                 .start(), delay);
     }
 
-    private void moveRightInfo(int delay, int x) {
+    private void moveRightInfo(int duration, int delay, int x) {
         final Handler handler = new Handler();
         handler.postDelayed(() -> mRightInfo.animate()
                 .translationXBy(x)
-                .setDuration(400)
+                .setDuration(duration)
                 .setListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animation) {
@@ -335,12 +335,12 @@ public class WelcomeActivity extends AppCompatActivity {
                 .start(), delay);
     }
 
-    private void moveLeftInfo(int delay, int x) {
+    private void moveLeftInfo(int duration, int delay, int x) {
         final Handler handler = new Handler();
         handler.postDelayed(() -> {
             mLeftInfo.animate()
                     .translationXBy(x)
-                    .setDuration(400)
+                    .setDuration(duration)
                     .setListener(new Animator.AnimatorListener() {
                         @Override
                         public void onAnimationStart(Animator animation) {
@@ -368,10 +368,10 @@ public class WelcomeActivity extends AppCompatActivity {
         }, delay);
     }
 
-    private void moveSideView(float x) {
+    private void moveSideView(int duration, float x) {
         mLeftView.animate()
                 .translationXBy(x * 2)
-                .setDuration(1000)
+                .setDuration(duration)
                 .setListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animation) {

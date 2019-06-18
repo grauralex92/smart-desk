@@ -15,28 +15,28 @@
         <Button
             android:id="@+id/cancel"
             android:layout_width="0dp"
-            android:layout_height="45dp"
+            android:layout_height="@dimen/signature_buttons_height"
             android:layout_weight="1"
             android:layout_gravity="bottom"
-            android:text="Cancel"
+            android:text="@string/signature_cancel_button"
             tools:ignore="ButtonStyle"
             android:textColor="@android:color/white"
             android:background="@color/colorPrimary" />
         <Button
             android:id="@+id/clear"
             android:layout_width="0dp"
-            android:layout_height="45dp"
+            android:layout_height="@dimen/signature_buttons_height"
             android:layout_weight="1"
-            android:text="Clear"
+            android:text="@string/signature_clear_button"
             tools:ignore="ButtonStyle"
             android:textColor="@android:color/white"
             android:background="@color/colorPrimary" />
         <Button
             android:id="@+id/getsign"
             android:layout_width="0dp"
-            android:layout_height="45dp"
+            android:layout_height="@dimen/signature_buttons_height"
             android:layout_weight="1"
-            android:text="Save"
+            android:text="@string/signature_save_button"
             tools:ignore="ButtonStyle"
             android:textColor="@android:color/white"
             android:background="@color/colorPrimary" />
