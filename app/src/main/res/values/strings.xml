@@ -6,9 +6,9 @@
     <string name="registration_successful">REGISTRATION SUCCESSFUL</string>
 
     <!-- Already Registered-->
-    <string name="already_registered">Already Registered</string>
+    <string name="already_registered">Already registered</string>
     <string name="continue_button_text">CONTINUE</string>
-    <string name="authentication_code">Authentication Code</string>
+    <string name="authentication_code">Registration code</string>
     <string name="already_registered_indication">Please enter the authentication code that we provided on your email address.</string>
     <string name="already_registered_description">By filling out this form and clicking continue, you will be taken to the registration form and all your data will be prepopulated. Please verify that all information is correct before submitting the registration form.</string>
 
