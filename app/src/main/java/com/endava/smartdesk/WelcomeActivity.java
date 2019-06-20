@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.Button;
@@ -18,12 +17,17 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class WelcomeActivity extends AppCompatActivity {
 
-    //region Layouts
     @BindView(R.id.register_now_view)
     ConstraintLayout mRegisterNowView;
 
@@ -41,9 +45,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
     @BindView(R.id.rightViewInfo)
     ConstraintLayout mRightInfo;
-    //endregion Layouts
 
-    //region Registration fields
     @BindView(R.id.first_name)
     EditText mFirstName;
 
@@ -67,7 +69,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
     @BindView(R.id.signature)
     ImageView mSignature;
-    //endregion Registration fields
 
     @BindView(R.id.authentication_code)
     EditText mAuthenticationCode;
@@ -87,9 +88,9 @@ public class WelcomeActivity extends AppCompatActivity {
     SignatureFragment mSignatureFragment;
 
     private float mScreenWidthInDp;
-
     private boolean isUserSigned;
     private boolean isUserAlreadyRegistered;
+    private RetrofitClient retrofitClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,37 +104,56 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mAlreadyRegisteredMenuButton.setOnClickListener(v -> onAlreadyRegisteredButtonClick());
-        mRegisterNowMenuButton.setOnClickListener(v -> onRegisterNowButtonClick());
+        mRegisterNowMenuButton.setOnClickListener(v -> onRegisterNowButtonClick(null));
         mRegisterButton.setOnClickListener(v -> finnishRegistration());
         mContinueButton.setOnClickListener(v -> continueRegistration());
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         mAlreadyRegisteredMenuButton.setOnClickListener(null);
         mRegisterNowMenuButton.setOnClickListener(null);
         mRegisterButton.setOnClickListener(null);
+        super.onDestroy();
     }
 
     private void continueRegistration() {
-        if ("".contentEquals(mAuthenticationCode.getText()) || !isAuthenticationCodeValid()) {
+        if (mAuthenticationCode.getText().toString().isEmpty()) {
             Toast.makeText(this, "Please provide a valid authentication code", Toast.LENGTH_SHORT).show();
         } else {
-            isUserAlreadyRegistered = true;
-            onRegisterNowButtonClick();
+            RetrofitServiceApi retrofitServiceApi = retrofitClient.getRetrofitClient();
+            retrofitServiceApi.retrieveUserData("")
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(userData -> {
+                        isUserAlreadyRegistered = true;
+                        onRegisterNowButtonClick(userData);
+                    }, throwable -> Toast.makeText(this, "Please provide a valid authentication code", Toast.LENGTH_SHORT).show());
+            ;
         }
-    }
-
-    private boolean isAuthenticationCodeValid() {
-        Log.d("GABI", mAuthenticationCode.getText().toString());
-        return mAuthenticationCode.getText().toString().equals("GABRIEL");
     }
 
     private void finnishRegistration() {
         if (isUserSigned) {
             if (areAllFieldsFilled()) {
-                startActivity(new Intent(WelcomeActivity.this, RegistrationSuccessfulActivity.class));
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                try {
+                    Date arrivalDate = dateFormat.parse(mArrivalDate.getText().toString());
+                    Date departureDate = dateFormat.parse(mDepartureDate.getText().toString());
+                    UserData userData = new UserData(mFirstName.getText().toString(),
+                            mLastName.getText().toString(), mCompanyName.getText().toString(),
+                            mEmailAddress.getText().toString(), mPurpose.getText().toString(),
+                            arrivalDate.getTime(),
+                            departureDate.getTime());
+                    RetrofitServiceApi retrofitServiceApi = retrofitClient.getRetrofitClient();
+                    retrofitServiceApi.sendAuthenticationCode(userData)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(object -> startActivity(new Intent(WelcomeActivity.this, RegistrationSuccessfulActivity.class)),
+                                    throwable -> Toast.makeText(WelcomeActivity.this, throwable.getLocalizedMessage(), Toast.LENGTH_SHORT).show());
+                } catch (ParseException e) {
+                    Toast.makeText(WelcomeActivity.this, "Please entey a valid date.", Toast.LENGTH_SHORT).show();
+                }
             } else {
                 Toast.makeText(this, "Please fill all the fields.", Toast.LENGTH_SHORT).show();
             }
@@ -146,15 +166,15 @@ public class WelcomeActivity extends AppCompatActivity {
 
     private void onAlreadyRegisteredButtonClick() {
         moveSideView(1000, mScreenWidthInDp / 3 * 2);
-        moveRegisterNowView(500, 0, -mScreenWidthInDp / 12 * 2);
+        moveRegisterNowView(null, 500, 0, -mScreenWidthInDp / 12 * 2);
         moveAlreadyRegisteredView(500, 500, -mScreenWidthInDp / 12 * 2);
         moveLeftInfo(400, 125, -140);
         moveRightInfo(400, 500, -140);
     }
 
-    private void onRegisterNowButtonClick() {
+    private void onRegisterNowButtonClick(UserData userData) {
         moveSideView(1000, -mScreenWidthInDp / 3 * 2);
-        moveRegisterNowView(500, 500, mScreenWidthInDp / 12 * 2);
+        moveRegisterNowView(userData, 500, 500, mScreenWidthInDp / 12 * 2);
         moveAlreadyRegisteredView(500, 0, mScreenWidthInDp / 12 * 2);
         moveLeftInfo(400, 500, 140);
         moveRightInfo(400, 125, 140);
@@ -194,14 +214,18 @@ public class WelcomeActivity extends AppCompatActivity {
         isUserSigned = false;
     }
 
-    private void fillFieldsWithDummyData() {
-        mFirstName.setText("Gabriel");
-        mLastName.setText("Blaj");
-        mCompanyName.setText("Endava");
-        mEmailAddress.setText("gabriel.blaj@endava.com");
-        mPurpose.setText("Visiting");
-        mArrivalDate.setText("17.06.2019");
-        mDepartureDate.setText("27.06.2019");
+    private void fillFields(UserData userData) {
+        if (userData != null) {
+            mFirstName.setText("Gabriel");
+            mLastName.setText("Blaj");
+            mCompanyName.setText("Endava");
+            mEmailAddress.setText("gabriel.blaj@endava.com");
+            mPurpose.setText("Visiting");
+            mArrivalDate.setText("17.06.2019");
+            mDepartureDate.setText("27.06.2019");
+        } else {
+            Toast.makeText(this, "Ooops! Something went wrong ...", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private boolean areAllFieldsFilled() {
@@ -235,7 +259,7 @@ public class WelcomeActivity extends AppCompatActivity {
         mRightInfo.animate().translationX(140).start();
     }
 
-    private void moveRegisterNowView(int duration, int delay, float x) {
+    private void moveRegisterNowView(UserData userData, int duration, int delay, float x) {
         final Handler handler = new Handler();
         handler.postDelayed(() -> mRegisterNowView.animate()
                 .translationXBy(x)
@@ -253,7 +277,7 @@ public class WelcomeActivity extends AppCompatActivity {
                             clearRegistrationFields();
                         } else {
                             if (isUserAlreadyRegistered) {
-                                fillFieldsWithDummyData();
+                                fillFields(userData);
                                 isUserAlreadyRegistered = false;
                             }
                         }
@@ -381,7 +405,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        mRegisterNowMenuButton.setOnClickListener(v -> onRegisterNowButtonClick());
+                        mRegisterNowMenuButton.setOnClickListener(v -> onRegisterNowButtonClick(null));
                         mAlreadyRegisteredMenuButton.setOnClickListener(v -> onAlreadyRegisteredButtonClick());
                     }
 

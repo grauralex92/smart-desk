@@ -11,7 +11,18 @@ public class UserData {
     private long departureDate;
 
     public UserData() {
+        // empty constructor
+    }
 
+    public UserData(String firstName, String lastName, String companyName, String email,
+                    String purpose, long arrivalDate, long departureDate) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.companyName = companyName;
+        this.email = email;
+        this.purpose = purpose;
+        this.arrivalDate = arrivalDate;
+        this.departureDate = departureDate;
     }
 
     public String getFirstName() {
