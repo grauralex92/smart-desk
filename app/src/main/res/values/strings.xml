@@ -36,4 +36,5 @@
     <string name="signature_cancel_button">Cancel</string>
     <string name="signature_clear_button">Clear</string>
     <string name="signature_save_button">Save</string>
+    <string name="badge_number">Badge Number</string>
 </resources>
