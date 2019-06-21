@@ -58,6 +58,9 @@ public class WelcomeActivity extends AppCompatActivity {
     @BindView(R.id.email_address)
     EditText mEmailAddress;
 
+    @BindView(R.id.badge_number)
+    EditText mBadgeNumber;
+
     @BindView(R.id.purpose)
     EditText mPurpose;
 
@@ -142,9 +145,8 @@ public class WelcomeActivity extends AppCompatActivity {
                     Date departureDate = dateFormat.parse(mDepartureDate.getText().toString());
                     UserData userData = new UserData(mFirstName.getText().toString(),
                             mLastName.getText().toString(), mCompanyName.getText().toString(),
-                            mEmailAddress.getText().toString(), mPurpose.getText().toString(),
-                            arrivalDate.getTime(),
-                            departureDate.getTime());
+                            mEmailAddress.getText().toString(), mBadgeNumber.getText().toString(),
+                            mPurpose.getText().toString(), arrivalDate.getTime(), departureDate.getTime());
                     RetrofitServiceApi retrofitServiceApi = retrofitClient.getRetrofitClient();
                     retrofitServiceApi.sendAuthenticationCode(userData)
                             .subscribeOn(Schedulers.io())
@@ -165,17 +167,17 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void onAlreadyRegisteredButtonClick() {
-        moveSideView(1000, mScreenWidthInDp / 3 * 2);
-        moveRegisterNowView(null, 500, 0, -mScreenWidthInDp / 12 * 2);
-        moveAlreadyRegisteredView(500, 500, -mScreenWidthInDp / 12 * 2);
+        moveSideView(1000, mScreenWidthInDp + 1);
+        moveRegisterNowView(null, 450, 75, -mScreenWidthInDp / 12 * 2);
+        moveAlreadyRegisteredView(450, 450, -mScreenWidthInDp / 4);
         moveLeftInfo(400, 125, -140);
         moveRightInfo(400, 500, -140);
     }
 
     private void onRegisterNowButtonClick(UserData userData) {
-        moveSideView(1000, -mScreenWidthInDp / 3 * 2);
-        moveRegisterNowView(userData, 500, 500, mScreenWidthInDp / 12 * 2);
-        moveAlreadyRegisteredView(500, 0, mScreenWidthInDp / 12 * 2);
+        moveSideView(1000, -mScreenWidthInDp - 1);
+        moveRegisterNowView(userData, 450, 450, mScreenWidthInDp / 12 * 2);
+        moveAlreadyRegisteredView(450, 75, mScreenWidthInDp / 4);
         moveLeftInfo(400, 500, 140);
         moveRightInfo(400, 125, 140);
     }
@@ -206,6 +208,7 @@ public class WelcomeActivity extends AppCompatActivity {
         mLastName.getText().clear();
         mCompanyName.getText().clear();
         mEmailAddress.getText().clear();
+        mBadgeNumber.getText().clear();
         mPurpose.getText().clear();
         mArrivalDate.getText().clear();
         mDepartureDate.getText().clear();
@@ -220,6 +223,7 @@ public class WelcomeActivity extends AppCompatActivity {
             mLastName.setText("Blaj");
             mCompanyName.setText("Endava");
             mEmailAddress.setText("gabriel.blaj@endava.com");
+            mBadgeNumber.setText("321");
             mPurpose.setText("Visiting");
             mArrivalDate.setText("17.06.2019");
             mDepartureDate.setText("27.06.2019");
@@ -236,6 +240,8 @@ public class WelcomeActivity extends AppCompatActivity {
         } else if ("".contentEquals(mCompanyName.getText())) {
             return false;
         } else if ("".contentEquals(mEmailAddress.getText())) {
+            return false;
+        } else if ("".contentEquals(mBadgeNumber.getText())) {
             return false;
         } else if ("".contentEquals(mPurpose.getText())) {
             return false;
@@ -299,7 +305,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private void moveAlreadyRegisteredView(int duration, int delay, float x) {
         final Handler handler = new Handler();
         handler.postDelayed(() -> mAlreadyRegisteredView.animate()
-                .translationXBy(x * 2)
+                .translationXBy(x)
                 .setDuration(duration)
                 .setListener(new Animator.AnimatorListener() {
                     @Override
@@ -394,7 +400,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
     private void moveSideView(int duration, float x) {
         mLeftView.animate()
-                .translationXBy(x * 2)
+                .translationXBy(x)
                 .setDuration(duration)
                 .setListener(new Animator.AnimatorListener() {
                     @Override

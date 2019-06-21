@@ -10,7 +10,7 @@
     <dimen name="registration_successful_details_text_size">20sp</dimen>
 
     <!--Welcome Activity -->
-    <dimen name="welcome_activity_main_views_width">400dp</dimen>
+    <dimen name="welcome_activity_main_views_width">416dp</dimen>
     <dimen name="welcome_activity_side_views_width">320dp</dimen>
     <dimen name="welcome_activity_side_layouts_width">280dp</dimen>
     <dimen name="welcome_activity_side_layouts_margins">16dp</dimen>
@@ -23,8 +23,8 @@
     <dimen name="main_layouts_button_top_margin">4dp</dimen>
     <dimen name="main_layouts_padding">16dp</dimen>
     <!-- Register Now Layout -->
-    <dimen name="signature_width">240dp</dimen>
-    <dimen name="signature_height">72dp</dimen>
+    <dimen name="signature_width">460dp</dimen>
+    <dimen name="signature_height">144dp</dimen>
     <dimen name="registration_fields_drawable_padding">4dp</dimen>
     <dimen name="privacy_policy_start_padding">4dp</dimen>
     <dimen name="registration_fields_padding">8dp</dimen>

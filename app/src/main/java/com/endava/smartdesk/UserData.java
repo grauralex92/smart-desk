@@ -6,6 +6,7 @@ public class UserData {
     private String lastName;
     private String companyName;
     private String email;
+    private String badge;
     private String purpose;
     private long arrivalDate;
     private long departureDate;
@@ -15,11 +16,12 @@ public class UserData {
     }
 
     public UserData(String firstName, String lastName, String companyName, String email,
-                    String purpose, long arrivalDate, long departureDate) {
+                    String badge, String purpose, long arrivalDate, long departureDate) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.companyName = companyName;
         this.email = email;
+        this.badge = badge;
         this.purpose = purpose;
         this.arrivalDate = arrivalDate;
         this.departureDate = departureDate;
@@ -55,6 +57,14 @@ public class UserData {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getBadge() {
+        return badge;
+    }
+
+    public void setBadge(String badge) {
+        this.badge = badge;
     }
 
     public String getPurpose() {
