@@ -1,4 +1,6 @@
-package com.endava.smartdesk;
+package com.endava.smartdesk.model;
+
+import java.util.Date;
 
 public class UserData {
 
@@ -6,22 +8,22 @@ public class UserData {
     private String lastName;
     private String companyName;
     private String email;
-    private String badge;
+    private String badgNumber;
     private String purpose;
-    private long arrivalDate;
-    private long departureDate;
+    private Date arrivalDate;
+    private Date departureDate;
 
     public UserData() {
         // empty constructor
     }
 
     public UserData(String firstName, String lastName, String companyName, String email,
-                    String badge, String purpose, long arrivalDate, long departureDate) {
+                    String badge, String purpose, Date arrivalDate, Date departureDate) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.companyName = companyName;
         this.email = email;
-        this.badge = badge;
+        this.badgNumber = badge;
         this.purpose = purpose;
         this.arrivalDate = arrivalDate;
         this.departureDate = departureDate;
@@ -59,12 +61,12 @@ public class UserData {
         this.email = email;
     }
 
-    public String getBadge() {
-        return badge;
+    public String getBadgeNumber() {
+        return badgNumber;
     }
 
-    public void setBadge(String badge) {
-        this.badge = badge;
+    public void setBadgNumber(String badgNumber) {
+        this.badgNumber = badgNumber;
     }
 
     public String getPurpose() {
@@ -75,19 +77,19 @@ public class UserData {
         this.purpose = purpose;
     }
 
-    public long getArrivalDate() {
+    public Date getArrivalDate() {
         return arrivalDate;
     }
 
-    public void setArrivalDate(long arrivalDate) {
+    public void setArrivalDate(Date arrivalDate) {
         this.arrivalDate = arrivalDate;
     }
 
-    public long getDepartureDate() {
+    public Date getDepartureDate() {
         return departureDate;
     }
 
-    public void setDepartureDate(long departureDate) {
+    public void setDepartureDate(Date departureDate) {
         this.departureDate = departureDate;
     }
 }

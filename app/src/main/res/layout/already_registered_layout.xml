@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
     android:padding="@dimen/main_layouts_padding">
 
     <TextView
@@ -41,8 +42,8 @@
         android:drawableStart="@drawable/ic_authentication"
         android:drawablePadding="@dimen/registration_fields_drawable_padding"
         android:hint="@string/authentication_code"
-        android:imeOptions="actionNext"
-        android:inputType="textCapWords"
+        android:imeOptions="actionDone"
+        android:inputType="textCapCharacters"
         android:padding="@dimen/authentication_code_padding"
         android:textColor="@color/endava_light_orange"
         android:textColorHint="@color/hint_color"

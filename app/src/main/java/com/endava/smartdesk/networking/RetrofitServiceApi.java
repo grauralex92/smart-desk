@@ -1,4 +1,6 @@
-package com.endava.smartdesk;
+package com.endava.smartdesk.networking;
+
+import com.endava.smartdesk.model.UserData;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
