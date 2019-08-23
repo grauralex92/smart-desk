@@ -1,4 +1,4 @@
-package com.endava.smartdesk;
+package com.endava.smartdesk.networking;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;

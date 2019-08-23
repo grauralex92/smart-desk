@@ -1,4 +1,4 @@
-package com.endava.smartdesk;
+package com.endava.smartdesk.view.fragments;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -28,6 +28,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.endava.smartdesk.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -269,7 +271,7 @@ public class SignatureFragment extends DialogFragment {
         void onSignListener(String storedPath);
     }
 
-    void setOnSignListener(OnSignListener listener) {
+    public void setOnSignListener(OnSignListener listener) {
         mSignListener = listener;
     }
 }
