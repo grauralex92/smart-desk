@@ -1,6 +1,6 @@
 package com.endava.smartdesk.networking;
 
-import com.endava.smartdesk.model.UserData;
+import com.endava.smartdesk.model.GuestUserData;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
@@ -11,8 +11,8 @@ import retrofit2.http.Query;
 public interface RetrofitServiceApi {
 
     @GET("retrieveUserData")
-    Observable<UserData> retrieveUserData(@Query("") String registrationToken);
+    Observable<GuestUserData> retrieveUserData(@Query("") String registrationToken);
 
     @POST("sendAuthenticationCode")
-    Observable<Object> sendAuthenticationCode(@Body UserData userData);
+    Observable<Object> sendAuthenticationCode(@Body GuestUserData guestUserData);
 }

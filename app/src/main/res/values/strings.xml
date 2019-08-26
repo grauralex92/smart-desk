@@ -20,7 +20,7 @@
     <string name="company_name">Company name</string>
     <string name="email_address">Email address</string>
     <string name="arrival_date">Arrival date</string>
-    <string name="purpose">Purpose</string>
+    <string name="tShirtSize">Purpose</string>
     <string name="departure_date">Departure date</string>
     <string name="privacy_policy">By filling out this form and clicking register, you agree to our privacy policy.</string>
 
@@ -36,5 +36,17 @@
     <string name="signature_cancel_button">Cancel</string>
     <string name="signature_clear_button">Clear</string>
     <string name="signature_save_button">Save</string>
+
+
     <string name="badge_number">Badge Number</string>
+    <string name="summer_party_registration">Summer Party Registration</string>
+    <string name="transportation">Transportation</string>
+    <string name="arrival_hour">Arrival Hour</string>
+    <string name="departure_hour">Departure Hour</string>
+    <string name="innovation_labs_registration">Innovation Labs Registration</string>
+    <string name="team_name">Team Name</string>
+    <string name="tshirt_size">T-Shirt Size</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="registration_form_dialog_title">Please select a registration form</string>
 </resources>

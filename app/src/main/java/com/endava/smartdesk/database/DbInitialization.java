@@ -6,9 +6,12 @@ import androidx.annotation.NonNull;
 
 import com.endava.smartdesk.database.model.DbCompanyMiningData;
 import com.endava.smartdesk.database.model.DbFirstNameMiningData;
+import com.endava.smartdesk.database.model.DbGuestUserData;
+import com.endava.smartdesk.database.model.DbInnovationLabsUserData;
 import com.endava.smartdesk.database.model.DbLastNameMiningData;
 import com.endava.smartdesk.database.model.DbRegistrationData;
-import com.endava.smartdesk.database.model.DbUserData;
+import com.endava.smartdesk.database.model.DbSummerPartyUserData;
+import com.endava.smartdesk.model.RegistrationForm;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -23,33 +26,66 @@ public class DbInitialization {
     }
 
     private static void populateDbWithMockedData(SmartDeskDataBase db) {
-        db.userDataModel().clear();
+        db.guestUserDataModel().clear();
+        db.innovationLabsUserDataModel().clear();
+        db.summerPartyUserDataModel().clear();
         db.registrationDataDao().clear();
 
-        DbUserData gabrielUserData = createUserData("Gabriel", "Blaj", "Endava",
+        DbGuestUserData gabrielGuestUserData = createGuestUserData("Gabriel", "Blaj", "Endava",
                 "gabriel.blaj@endava.com", "39", "Employee",
-                newDate(2019, 8, 23, 8, 30),
-                newDate(2019, 8, 24, 17, 30));
-        DbRegistrationData gabrielRegistrationData = createRegistrationData(gabrielUserData.email, "ABC4321");
-        insertData(db, gabrielUserData, gabrielRegistrationData);
-        DbUserData alexUserData = createUserData("Alex", "Graur", "Endava",
+                newDateAndHour(2019, 8, 23, 8, 30),
+                newDateAndHour(2019, 8, 24, 17, 30));
+        DbRegistrationData gabrielGuestRegistrationData = createRegistrationData(gabrielGuestUserData.email,
+                "ABC4321", RegistrationForm.GUEST_FORM.getFormName());
+        insertGuestData(db, gabrielGuestUserData, gabrielGuestRegistrationData);
+
+        DbSummerPartyUserData gabrielSummerPartyUserData = createSummerPartyUserData("Gabriel", "Blaj",
+                "gabriel.blaj@endava.com", "Bus", newHour(17, 0), newHour(3, 0));
+        DbRegistrationData gabrielSummerPartyRegistrationData = createRegistrationData(gabrielSummerPartyUserData.email,
+                "SUMMER12", RegistrationForm.SUMMER_PARTY_FORM.getFormName());
+        insertSummerPartyData(db, gabrielSummerPartyUserData, gabrielSummerPartyRegistrationData);
+
+        DbInnovationLabsUserData gabrielInnovationLabsUserData = createInnovationLabsUserData("Gabriel", "Blaj",
+                "SSI", "gabriel.blaj@endava.com", "Car", "M");
+        DbRegistrationData gabrielInnovationLabsRegistrationData = createRegistrationData(gabrielInnovationLabsUserData.email,
+                "INN1234", RegistrationForm.INNOVATION_LABS_FORM.getFormName());
+        insertInnovationLabsData(db, gabrielInnovationLabsUserData, gabrielInnovationLabsRegistrationData);
+
+        DbGuestUserData alexGuestUserData = createGuestUserData("Alex", "Graur", "Endava",
                 "alex.graur@endava.com", "61", "Employee",
-                newDate(2019, 8, 25, 9, 0),
-                newDate(2019, 8, 26, 18, 0));
-        DbRegistrationData alexRegistrationData = createRegistrationData(alexUserData.email, "QWERTY1");
-        insertData(db, alexUserData, alexRegistrationData);
-        DbUserData mariusUserData = createUserData("Marius", "Olenici", "Endava",
+                newDateAndHour(2019, 8, 25, 9, 0),
+                newDateAndHour(2019, 8, 26, 18, 0));
+        DbRegistrationData alexGuestRegistrationData = createRegistrationData(alexGuestUserData.email,
+                "QWERTY1", RegistrationForm.GUEST_FORM.getFormName());
+        insertGuestData(db, alexGuestUserData, alexGuestRegistrationData);
+
+        DbSummerPartyUserData alexSummerPartyUserData = createSummerPartyUserData("Alex", "Graur",
+                "alex.graur@endava.com", "Car", newHour(15, 0), newHour(1, 0));
+        DbRegistrationData alexSummerPartyRegistrationData = createRegistrationData(alexSummerPartyUserData.email,
+                "SUMMER32", RegistrationForm.SUMMER_PARTY_FORM.getFormName());
+        insertSummerPartyData(db, alexSummerPartyUserData, alexSummerPartyRegistrationData);
+
+        DbGuestUserData mariusUserData = createGuestUserData("Marius", "Olenici", "Endava",
                 "marius.olenici@endava.com", "13", "Employee",
-                newDate(2019, 8, 27, 10, 15),
-                newDate(2019, 8, 28, 18, 30));
-        DbRegistrationData mariusRegistrationData = createRegistrationData(mariusUserData.email, "1234ABC");
-        insertData(db, mariusUserData, mariusRegistrationData);
-        DbUserData mihaiUserData = createUserData("Mihai", "Rosu", "Endava",
+                newDateAndHour(2019, 8, 27, 10, 15),
+                newDateAndHour(2019, 8, 28, 18, 30));
+        DbRegistrationData mariusRegistrationData = createRegistrationData(mariusUserData.email,
+                "1234ABC", RegistrationForm.GUEST_FORM.getFormName());
+        insertGuestData(db, mariusUserData, mariusRegistrationData);
+
+        DbInnovationLabsUserData mariusInnovationLabsUserData = createInnovationLabsUserData("Marius", "Olenici",
+                "SSI", "marius.olenici@endava.com", "Car", "M");
+        DbRegistrationData mariusInnovationLabsRegistrationData = createRegistrationData(mariusInnovationLabsUserData.email,
+                "INN4321", RegistrationForm.INNOVATION_LABS_FORM.getFormName());
+        insertInnovationLabsData(db, mariusInnovationLabsUserData, mariusInnovationLabsRegistrationData);
+
+        DbGuestUserData mihaiGuestUserData = createGuestUserData("Mihai", "Rosu", "Endava",
                 "mihai.rosu@endava.com", "23", "Employee",
-                newDate(2019, 8, 26, 10, 30),
-                newDate(2019, 8, 27, 19, 0));
-        DbRegistrationData mihaiRegistrationData = createRegistrationData(mihaiUserData.email, "ASDFG12");
-        insertData(db, mihaiUserData, mihaiRegistrationData);
+                newDateAndHour(2019, 8, 26, 10, 30),
+                newDateAndHour(2019, 8, 27, 19, 0));
+        DbRegistrationData mihaiGuestRegistrationData = createRegistrationData(mihaiGuestUserData.email,
+                "ASDFG12", RegistrationForm.GUEST_FORM.getFormName());
+        insertGuestData(db, mihaiGuestUserData, mihaiGuestRegistrationData);
 
         insertMiningData(db);
     }
@@ -101,10 +137,34 @@ public class DbInitialization {
         db.companyMiningDao().insert(companyMiningData);
     }
 
-    private static DbUserData createUserData(String firstName, String lastName,
-                                             String companyName, String email, String badgeNumber,
-                                             String purpose, Date arrivalDate, Date departureDate) {
-        DbUserData userData = new DbUserData();
+    private static DbSummerPartyUserData createSummerPartyUserData(String firstName, String lastName, String email,
+                                                                   String transportation, Date arrivalHour, Date departureHour) {
+        DbSummerPartyUserData userData = new DbSummerPartyUserData();
+        userData.firstName = firstName;
+        userData.lastName = lastName;
+        userData.email = email;
+        userData.transportation = transportation;
+        userData.arrivalHour = arrivalHour;
+        userData.departureHour = departureHour;
+        return userData;
+    }
+
+    private static DbInnovationLabsUserData createInnovationLabsUserData(String firstName, String lastName, String teamName,
+                                                                         String email, String transportation, String tShirtSize) {
+        DbInnovationLabsUserData userData = new DbInnovationLabsUserData();
+        userData.firstName = firstName;
+        userData.lastName = lastName;
+        userData.teamName = teamName;
+        userData.email = email;
+        userData.transportation = transportation;
+        userData.tShirtSize = tShirtSize;
+        return userData;
+    }
+
+    private static DbGuestUserData createGuestUserData(String firstName, String lastName,
+                                                       String companyName, String email, String badgeNumber,
+                                                       String purpose, Date arrivalDate, Date departureDate) {
+        DbGuestUserData userData = new DbGuestUserData();
         userData.firstName = firstName;
         userData.lastName = lastName;
         userData.companyName = companyName;
@@ -116,20 +176,42 @@ public class DbInitialization {
         return userData;
     }
 
-    private static DbRegistrationData createRegistrationData(String email, String registrationCode) {
+    private static DbRegistrationData createRegistrationData(String email, String registrationCode,
+                                                             String formType) {
         DbRegistrationData registrationData = new DbRegistrationData();
         registrationData.email = email;
         registrationData.registrationCode = registrationCode;
+        registrationData.formType = formType;
         return registrationData;
     }
 
-    private static void insertData(SmartDeskDataBase db, DbUserData userData,
-                                   DbRegistrationData registrationData) {
-        db.userDataModel().insert(userData);
+    private static void insertGuestData(SmartDeskDataBase db, DbGuestUserData userData,
+                                        DbRegistrationData registrationData) {
+        db.guestUserDataModel().insert(userData);
         db.registrationDataDao().insert(registrationData);
     }
 
-    private static Date newDate(int year, int month, int day, int hour, int minute) {
+    private static void insertSummerPartyData(SmartDeskDataBase db, DbSummerPartyUserData userData,
+                                              DbRegistrationData registrationData) {
+        db.summerPartyUserDataModel().insert(userData);
+        db.registrationDataDao().insert(registrationData);
+    }
+
+    private static void insertInnovationLabsData(SmartDeskDataBase db, DbInnovationLabsUserData userData,
+                                                 DbRegistrationData registrationData) {
+        db.innovationLabsUserDataModel().insert(userData);
+        db.registrationDataDao().insert(registrationData);
+    }
+
+    private static Date newHour(int hour, int minute) {
+        Calendar calendar = GregorianCalendar.getInstance(Locale.US);
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, 0);
+        return calendar.getTime();
+    }
+
+    private static Date newDateAndHour(int year, int month, int day, int hour, int minute) {
         Calendar calendar = GregorianCalendar.getInstance(Locale.US);
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, month);

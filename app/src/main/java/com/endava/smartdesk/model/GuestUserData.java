@@ -2,7 +2,7 @@ package com.endava.smartdesk.model;
 
 import java.util.Date;
 
-public class UserData {
+public class GuestUserData extends RegistrationData {
 
     private String firstName;
     private String lastName;
@@ -13,12 +13,12 @@ public class UserData {
     private Date arrivalDate;
     private Date departureDate;
 
-    public UserData() {
+    public GuestUserData() {
         // empty constructor
     }
 
-    public UserData(String firstName, String lastName, String companyName, String email,
-                    String badge, String purpose, Date arrivalDate, Date departureDate) {
+    public GuestUserData(String firstName, String lastName, String companyName, String email,
+                         String badge, String purpose, Date arrivalDate, Date departureDate) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.companyName = companyName;

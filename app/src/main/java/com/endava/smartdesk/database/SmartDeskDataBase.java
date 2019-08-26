@@ -8,23 +8,32 @@ import androidx.room.RoomDatabase;
 
 import com.endava.smartdesk.database.dao.CompanyMiningDao;
 import com.endava.smartdesk.database.dao.FirstNameMiningDao;
+import com.endava.smartdesk.database.dao.GuestUserDataDao;
+import com.endava.smartdesk.database.dao.InnovationLabsUserDataDao;
 import com.endava.smartdesk.database.dao.LastNameMiningDao;
 import com.endava.smartdesk.database.dao.RegistrationDataDao;
-import com.endava.smartdesk.database.dao.UserDataDao;
+import com.endava.smartdesk.database.dao.SummerPartyUserDataDao;
 import com.endava.smartdesk.database.model.DbCompanyMiningData;
 import com.endava.smartdesk.database.model.DbFirstNameMiningData;
+import com.endava.smartdesk.database.model.DbGuestUserData;
+import com.endava.smartdesk.database.model.DbInnovationLabsUserData;
 import com.endava.smartdesk.database.model.DbLastNameMiningData;
 import com.endava.smartdesk.database.model.DbRegistrationData;
-import com.endava.smartdesk.database.model.DbUserData;
+import com.endava.smartdesk.database.model.DbSummerPartyUserData;
 
-@Database(entities = {DbUserData.class, DbRegistrationData.class, DbFirstNameMiningData.class
+@Database(entities = {DbGuestUserData.class, DbSummerPartyUserData.class, DbInnovationLabsUserData.class
+        , DbRegistrationData.class, DbFirstNameMiningData.class
         , DbLastNameMiningData.class, DbCompanyMiningData.class}, version = 1)
 public abstract class SmartDeskDataBase extends RoomDatabase {
 
     private static final String DB_NAME = "SmartDeskDB.db";
     private static SmartDeskDataBase sInstance;
 
-    public abstract UserDataDao userDataModel();
+    public abstract GuestUserDataDao guestUserDataModel();
+
+    public abstract SummerPartyUserDataDao summerPartyUserDataModel();
+
+    public abstract InnovationLabsUserDataDao innovationLabsUserDataModel();
 
     public abstract RegistrationDataDao registrationDataDao();
 

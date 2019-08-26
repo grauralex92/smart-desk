@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/registration_navigation_graph"
+    app:startDestination="@id/guestRegistrationFragment">
+
+    <fragment
+        android:id="@+id/innovationLabsRegistrationFragment"
+        android:name="com.endava.smartdesk.view.fragments.InnovationLabsRegistrationFragment"
+        android:label="InnovationLabsRegistrationFragment" />
+    <fragment
+        android:id="@+id/guestRegistrationFragment"
+        android:name="com.endava.smartdesk.view.fragments.GuestRegistrationFragment"
+        android:label="GuestRegistrationFragment" />
+    <fragment
+        android:id="@+id/summerPartyRegistrationFragment"
+        android:name="com.endava.smartdesk.view.fragments.SummerPartyRegistrationFragment"
+        android:label="SummerPartyRegistrationFragment" />
+    <action android:id="@+id/action_global_summerPartyRegistrationFragment" app:destination="@id/summerPartyRegistrationFragment" />
+    <action android:id="@+id/action_global_guestRegistrationFragment" app:destination="@id/guestRegistrationFragment" />
+    <action android:id="@+id/action_global_innovationLabsRegistrationFragment" app:destination="@id/innovationLabsRegistrationFragment" />
+</navigation>

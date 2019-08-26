@@ -1,22 +1,15 @@
 package com.endava.smartdesk.view.activities;
 
 import android.animation.Animator;
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,22 +17,23 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.endava.smartdesk.R;
 import com.endava.smartdesk.database.DbInitialization;
 import com.endava.smartdesk.database.SmartDeskDataBase;
 import com.endava.smartdesk.database.model.DbRegistrationData;
-import com.endava.smartdesk.database.model.DbUserData;
-import com.endava.smartdesk.model.UserData;
+import com.endava.smartdesk.model.GuestUserData;
+import com.endava.smartdesk.model.InnovationLabsUserData;
+import com.endava.smartdesk.model.RegistrationData;
+import com.endava.smartdesk.model.RegistrationForm;
+import com.endava.smartdesk.model.SummerPartyUserData;
 import com.endava.smartdesk.networking.RetrofitClient;
 import com.endava.smartdesk.utils.UserDataMapper;
-import com.endava.smartdesk.view.fragments.SignatureFragment;
+import com.endava.smartdesk.view.fragments.BaseRegistrationFragment;
 import com.facebook.stetho.Stetho;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 
 import butterknife.BindView;
@@ -70,33 +64,6 @@ public class WelcomeActivity extends AppCompatActivity {
     @BindView(R.id.rightViewInfo)
     ConstraintLayout mRightInfo;
 
-    @BindView(R.id.first_name)
-    AutoCompleteTextView mFirstName;
-
-    @BindView(R.id.last_name)
-    AutoCompleteTextView mLastName;
-
-    @BindView(R.id.company_name)
-    AutoCompleteTextView mCompanyName;
-
-    @BindView(R.id.email_address)
-    EditText mEmailAddress;
-
-    @BindView(R.id.badge_number)
-    EditText mBadgeNumber;
-
-    @BindView(R.id.purpose)
-    EditText mPurpose;
-
-    @BindView(R.id.arrival_date)
-    EditText mArrivalDate;
-
-    @BindView(R.id.departure_date)
-    EditText mDepartureDate;
-
-    @BindView(R.id.signature)
-    ImageView mSignature;
-
     @BindView(R.id.authentication_code)
     EditText mRegistrationCode;
 
@@ -106,21 +73,19 @@ public class WelcomeActivity extends AppCompatActivity {
     @BindView(R.id.register_now_menu_button)
     Button mRegisterNowMenuButton;
 
-    @BindView(R.id.register_button)
-    Button mRegisterButton;
-
     @BindView(R.id.continue_button)
     Button mContinueButton;
 
+    @BindView(R.id.form_icon)
+    ImageView mFormIcon;
+
+    private NavHostFragment mNestedNav;
     public static SmartDeskDataBase mDb;
 
     private float mScreenWidthInPixels;
-    private boolean isUserSigned;
     private boolean isUserAlreadyRegistered;
-    private SignatureFragment mSignatureFragment;
     private RetrofitClient retrofitClient;
     private UserDataMapper mUserDataMapper;
-    private String mDateAndTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,8 +95,7 @@ public class WelcomeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initDB();
         initViews();
-        setupUI(mView);
-        mUserDataMapper = new UserDataMapper();
+        setupKeyboard(mView);
     }
 
     @Override
@@ -139,19 +103,7 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onResume();
         mAlreadyRegisteredMenuButton.setOnClickListener(v -> onSideMenuClick(true, null));
         mRegisterNowMenuButton.setOnClickListener(v -> onSideMenuClick(false, null));
-        mRegisterButton.setOnClickListener(v -> finnishRegistration());
         mContinueButton.setOnClickListener(v -> continueRegistration());
-        mArrivalDate.setOnClickListener(v -> getDate(mArrivalDate));
-        mDepartureDate.setOnClickListener(v -> getDate(mDepartureDate));
-        mLastName.setOnItemClickListener((parent, view, position, id) -> {
-            String lastName = parent.getItemAtPosition(position).toString();
-            DbUserData user = mDb.userDataModel().getUserDataByLastName(lastName);
-            if (user != null) {
-                if (user.firstName.equals(mFirstName.getText().toString())) {
-                    fillFields(mUserDataMapper.convertToUserData(user), true);
-                }
-            }
-        });
         mRegistrationCode.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 hideSoftKeyboard(WelcomeActivity.this);
@@ -159,67 +111,73 @@ public class WelcomeActivity extends AppCompatActivity {
             }
             return false;
         });
+        mFormIcon.setOnClickListener(view -> displayFormDialog());
     }
 
-    public void setupUI(View view) {
+    private void displayFormDialog() {
+        int i = 0;
+        String[] forms = new String[RegistrationForm.values().length];
+        for (RegistrationForm form : RegistrationForm.values()) {
+            forms[i] = form.getFormName();
+            i++;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(WelcomeActivity.this, R.style.AlertDialogStyle);
+        builder.setTitle(getResources().getString(R.string.registration_form_dialog_title));
+        builder.setItems(forms, (dialog, which) ->
+                changeForm(forms[which]));
+        builder.show();
+    }
+
+    private void changeForm(String formName) {
+        if (formName.equals(RegistrationForm.GUEST_FORM.getFormName())) {
+            navigateToNewRegistrationForm(R.id.action_global_guestRegistrationFragment,
+                    R.id.guestRegistrationFragment);
+        } else if (formName.equals(RegistrationForm.INNOVATION_LABS_FORM.getFormName())) {
+            navigateToNewRegistrationForm(R.id.action_global_innovationLabsRegistrationFragment,
+                    R.id.innovationLabsRegistrationFragment);
+        } else if (formName.equals(RegistrationForm.SUMMER_PARTY_FORM.getFormName())) {
+            navigateToNewRegistrationForm(R.id.action_global_summerPartyRegistrationFragment,
+                    R.id.summerPartyRegistrationFragment);
+        }
+    }
+
+    private void navigateToNewRegistrationForm(int actionId, int fragmentID) {
+        int currentFragment = mNestedNav.getNavController().getCurrentDestination().getId();
+        if (currentFragment != fragmentID) {
+            Navigation.findNavController(findViewById(R.id.registration_nav_host_fragment))
+                    .navigate(actionId);
+        }
+    }
+
+    public void setupKeyboard(View view) {
         if (!(view instanceof EditText) && !(view instanceof Button)) {
             view.setOnTouchListener((v, event) -> {
                 hideSoftKeyboard(WelcomeActivity.this);
                 return false;
             });
         }
-
         if (view instanceof ViewGroup) {
             for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
                 View innerView = ((ViewGroup) view).getChildAt(i);
-                setupUI(innerView);
+                setupKeyboard(innerView);
             }
         }
     }
 
-    private void getDate(EditText dateField) {
-        mDateAndTime = "";
-        final Calendar calendar = Calendar.getInstance();
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int month = calendar.get(Calendar.MONTH);
-        int year = calendar.get(Calendar.YEAR);
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-
-        DatePickerDialog picker = new DatePickerDialog(WelcomeActivity.this,
-                (datePickerView, newYear, newMonth, newDay) -> {
-                    mDateAndTime = newDay + "/" + (newMonth + 1) + "/" + newYear;
-                    TimePickerDialog timePickerDialog = new TimePickerDialog(WelcomeActivity.this,
-                            (timePickerView, newHour, newMinute) -> {
-                                mDateAndTime = mDateAndTime + " " + newHour + ":" + newMinute;
-                                dateField.setText(mDateAndTime);
-                            }, hour, minute, false);
-                    timePickerDialog.show();
-                }, year, month, day);
-        picker.show();
-    }
-
-    private String setDate(Date arrivalDate) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(arrivalDate);
-
-        return c.get(Calendar.YEAR) + "/" + c.get(Calendar.MONTH) + "/" + c.get(Calendar.DAY_OF_MONTH) + " "
-                + c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE);
-    }
-
     private void initDB() {
         mDb = SmartDeskDataBase.getDatabase(getApplicationContext());
-        if (mDb.userDataModel().getUserDataSize() == 0 && mDb.registrationDataDao().getRegistrationDataSize() == 0) {
+        if (mDb.guestUserDataModel().getUsersNumber() == 0 && mDb.registrationDataDao().getRegistrationDataSize() == 0) {
             DbInitialization.populeDb(mDb);
         }
         List<DbRegistrationData> registrationDataList = mDb.registrationDataDao().getAllRegistrationData();
         for (int i = 0; i < registrationDataList.size(); i++) {
-            Log.d("GABI", registrationDataList.get(i).email + " : " +
-                    registrationDataList.get(i).registrationCode);
+            Log.d("GABI", registrationDataList.get(i).formType + ": " +
+                    registrationDataList.get(i).email + " - " + registrationDataList.get(i).registrationCode);
         }
     }
 
-    void startAnimation(ConstraintLayout view, Animator.AnimatorListener animatorListener, int duration, int delay, float x) {
+    void startViewAnimation(View view, Animator.AnimatorListener animatorListener, int duration, int delay, float x) {
         final Handler handler = new Handler();
         handler.postDelayed(() -> view.animate()
                 .translationXBy(x)
@@ -228,25 +186,29 @@ public class WelcomeActivity extends AppCompatActivity {
                 .start(), delay);
     }
 
-    private void onSideMenuClick(boolean isSideMenuOnLeft, UserData userData) {
+    private void onSideMenuClick(boolean isSideMenuOnLeft, RegistrationData registrationData) {
         int flag = (isSideMenuOnLeft) ? -1 : 1;
         int registerNowViewDelay = (isSideMenuOnLeft) ? 75 : 450;
         int alreadyRegisteredViewDelay = (isSideMenuOnLeft) ? 450 : 75;
         int leftInfoDelay = (isSideMenuOnLeft) ? 125 : 500;
         int rightInfoDelay = (isSideMenuOnLeft) ? 500 : 125;
 
-        startAnimation(mLeftView, getSideViewAnimatorListener(), 1000, 0, -1 * flag * mScreenWidthInPixels / 3 * 2);
-        startAnimation(mRegisterNowView, getRegisterNowViewAnimatorListener(flag * mScreenWidthInPixels / 9, userData),
+        startViewAnimation(mLeftView, getSideViewAnimatorListener(), 1000, 0, -1 * flag * mScreenWidthInPixels / 3 * 2);
+        startViewAnimation(mRegisterNowView, getRegisterNowViewAnimatorListener(flag, registrationData),
                 450, registerNowViewDelay, flag * mScreenWidthInPixels / 9);
-        startAnimation(mAlreadyRegisteredView, getAlreadyRegisteredAnimatorListener(flag * mScreenWidthInPixels / 6),
+        startViewAnimation(mAlreadyRegisteredView, getAlreadyRegisteredAnimatorListener(flag),
                 450, alreadyRegisteredViewDelay, flag * mScreenWidthInPixels / 6);
-        startAnimation(mLeftInfo, getLeftInfoAnimatorListener(flag * mScreenWidthInPixels / 14),
+        startViewAnimation(mLeftInfo, getLeftInfoAnimatorListener(flag),
                 400, leftInfoDelay, flag * mScreenWidthInPixels / 14);
-        startAnimation(mRightInfo, getRightInfoAnimatorListener(flag * mScreenWidthInPixels / 14),
+        startViewAnimation(mRightInfo, getRightInfoAnimatorListener(flag),
                 400, rightInfoDelay, flag * mScreenWidthInPixels / 14);
+        startViewAnimation(mFormIcon, null, 400, leftInfoDelay, -flag * mScreenWidthInPixels / 14);
     }
 
     private void initViews() {
+        mNestedNav = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.registration_nav_host_fragment);
+        mUserDataMapper = new UserDataMapper();
+
         Display display = getWindowManager().getDefaultDisplay();
         DisplayMetrics outMetrics = new DisplayMetrics();
         display.getMetrics(outMetrics);
@@ -258,25 +220,7 @@ public class WelcomeActivity extends AppCompatActivity {
         setViewsWidth(mRegisterNowView);
 
         setViewsVisibility();
-
-        setAutoCompleteViews(mFirstName, mDb.firstNameMiningDao().getAllFirstNames());
-        setAutoCompleteViews(mLastName, mDb.lastNameMiningDao().getAllLastNames());
-        setAutoCompleteViews(mCompanyName, mDb.companyMiningDao().getAllCompanyNames());
-
-        isUserSigned = false;
         isUserAlreadyRegistered = false;
-
-        mArrivalDate.setInputType(InputType.TYPE_NULL);
-        mDepartureDate.setInputType(InputType.TYPE_NULL);
-    }
-
-    private void setAutoCompleteViews(AutoCompleteTextView view, List<String> autoCompleteList) {
-        List<String> uniqueValueList = new ArrayList<>(new HashSet<>(autoCompleteList));
-
-        ArrayAdapter<String> firstNameAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_dropdown_item_1line, uniqueValueList);
-        view.setThreshold(1);
-        view.setAdapter(firstNameAdapter);
     }
 
     private void setViewsWidth(ConstraintLayout layout) {
@@ -293,8 +237,9 @@ public class WelcomeActivity extends AppCompatActivity {
             DbRegistrationData registrationData = mDb.registrationDataDao().getRegistrationData(registrationCode);
             if (registrationData != null) {
                 isUserAlreadyRegistered = true;
-                DbUserData dbUserData = mDb.userDataModel().getUserDataByEmail(registrationData.email);
-                onSideMenuClick(false, mUserDataMapper.convertToUserData(dbUserData));
+                RegistrationData data = getUserDataByFormType(registrationData.formType, registrationData.email);
+                navigateToFragmentByDataType(data);
+                onSideMenuClick(false, data);
             } else {
                 Toast.makeText(this, "Please provide a valid registration code", Toast.LENGTH_SHORT).show();
             }
@@ -311,87 +256,30 @@ public class WelcomeActivity extends AppCompatActivity {
 //        }
     }
 
-    private void finnishRegistration() {
-        if (isUserSigned) {
-            if (areAllFieldsFilled()) {
-                startActivity(new Intent(WelcomeActivity.this, RegistrationSuccessfulActivity.class));
-
-                //Retrofit
-//                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//                try {
-//                    Date arrivalDate = dateFormat.parse(mArrivalDate.getText().toString());
-//                    Date departureDate = dateFormat.parse(mDepartureDate.getText().toString());
-//                    UserData userData = new UserData(mFirstName.getText().toString(),
-//                            mLastName.getText().toString(), mCompanyName.getText().toString(),
-//                            mEmailAddress.getText().toString(), mBadgeNumber.getText().toString(),
-//                            mPurpose.getText().toString(), arrivalDate.getTime(), departureDate.getTime());
-//                    RetrofitServiceApi retrofitServiceApi = retrofitClient.getRetrofitClient();
-//                    retrofitServiceApi.sendAuthenticationCode(userData)
-//                            .subscribeOn(Schedulers.io())
-//                            .observeOn(AndroidSchedulers.mainThread())
-//                            .subscribe(object -> startActivity(new Intent(WelcomeActivity.this, RegistrationSuccessfulActivity.class)),
-//                                    throwable -> Toast.makeText(WelcomeActivity.this, throwable.getLocalizedMessage(), Toast.LENGTH_SHORT).show());
-//                } catch (ParseException e) {
-//                    Toast.makeText(WelcomeActivity.this, "Please entey a valid date.", Toast.LENGTH_SHORT).show();
-//                }
-            } else {
-                Toast.makeText(this, "Please fill all the fields.", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            mSignatureFragment = SignatureFragment.newInstance();
-            mSignatureFragment.show(getSupportFragmentManager(), "Signature Fragment");
-            mSignatureFragment.setOnSignListener(this::onSignComplete);
+    private void navigateToFragmentByDataType(RegistrationData data) {
+        if (data instanceof GuestUserData) {
+            navigateToNewRegistrationForm(R.id.action_global_guestRegistrationFragment, R.id.guestRegistrationFragment);
+        } else if (data instanceof SummerPartyUserData) {
+            navigateToNewRegistrationForm(R.id.action_global_summerPartyRegistrationFragment, R.id.summerPartyRegistrationFragment);
+        } else if (data instanceof InnovationLabsUserData) {
+            navigateToNewRegistrationForm(R.id.action_global_innovationLabsRegistrationFragment, R.id.innovationLabsRegistrationFragment);
         }
     }
 
-    private void clearRegistrationFields() {
-        mFirstName.getText().clear();
-        mLastName.getText().clear();
-        mCompanyName.getText().clear();
-        mEmailAddress.getText().clear();
-        mBadgeNumber.getText().clear();
-        mPurpose.getText().clear();
-        mArrivalDate.getText().clear();
-        mDepartureDate.getText().clear();
-        mRegisterButton.setText(getResources().getString(R.string.register_button_text));
-        mSignature.setImageDrawable(null);
-        isUserSigned = false;
-    }
-
-    private void fillFields(UserData userData, boolean fillPartially) {
-        if (userData != null) {
-            mFirstName.setText(userData.getFirstName());
-            mLastName.setText(userData.getLastName());
-            mCompanyName.setText(userData.getCompanyName());
-            mEmailAddress.setText(userData.getEmail());
-            if (!fillPartially) {
-                mBadgeNumber.setText(userData.getBadgeNumber());
-                mPurpose.setText(userData.getPurpose());
-                mArrivalDate.setText(setDate(userData.getArrivalDate()));
-                mDepartureDate.setText(setDate(userData.getDepartureDate()));
-            }
-        } else {
-            Toast.makeText(this, "Something went wrong. Please try again", Toast.LENGTH_SHORT).show();
+    private RegistrationData getUserDataByFormType(String formType, String email) {
+        RegistrationData data = null;
+        switch (formType) {
+            case "Guest Registration Form":
+                data = mUserDataMapper.convertToGuestUserData(mDb.guestUserDataModel().getUserDataByEmail(email));
+                break;
+            case "Summer Party Registration Form":
+                data = mUserDataMapper.convertToSummerPartyUserData(mDb.summerPartyUserDataModel().getUserDataByEmail(email));
+                break;
+            case "Innovation Labs Registration Form":
+                data = mUserDataMapper.convertToInnovationLabsUserData(mDb.innovationLabsUserDataModel().getUserDataByEmail(email));
+                break;
         }
-    }
-
-
-    private boolean areAllFieldsFilled() {
-        if ("".contentEquals(mFirstName.getText())) {
-            return false;
-        } else if ("".contentEquals(mLastName.getText())) {
-            return false;
-        } else if ("".contentEquals(mCompanyName.getText())) {
-            return false;
-        } else if ("".contentEquals(mEmailAddress.getText())) {
-            return false;
-        } else if ("".contentEquals(mBadgeNumber.getText())) {
-            return false;
-        } else if ("".contentEquals(mPurpose.getText())) {
-            return false;
-        } else if ("".contentEquals(mArrivalDate.getText())) {
-            return false;
-        } else return !"".contentEquals(mDepartureDate.getText());
+        return data;
     }
 
     private void clearAuthCodeField() {
@@ -405,6 +293,9 @@ public class WelcomeActivity extends AppCompatActivity {
         mAlreadyRegisteredView.setVisibility(View.INVISIBLE);
     }
 
+    private BaseRegistrationFragment getRegistrationFragment() {
+        return (BaseRegistrationFragment) mNestedNav.getChildFragmentManager().getFragments().get(0);
+    }
 
     Animator.AnimatorListener getSideViewAnimatorListener() {
         return new Animator.AnimatorListener() {
@@ -432,7 +323,7 @@ public class WelcomeActivity extends AppCompatActivity {
         };
     }
 
-    Animator.AnimatorListener getRegisterNowViewAnimatorListener(float x, UserData userData) {
+    Animator.AnimatorListener getRegisterNowViewAnimatorListener(float x, RegistrationData registrationData) {
         return new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -443,10 +334,11 @@ public class WelcomeActivity extends AppCompatActivity {
             public void onAnimationEnd(Animator animation) {
                 if (x < 0) {
                     mRegisterNowView.setVisibility(View.INVISIBLE);
-                    clearRegistrationFields();
+                    getRegistrationFragment().clearRegistrationFields();
+                    getRegistrationFragment().setUserSignedInToFalse();
                 } else {
                     if (isUserAlreadyRegistered) {
-                        fillFields(userData, false);
+                        getRegistrationFragment().fillFields(registrationData, false);
                         isUserAlreadyRegistered = false;
                     }
                 }
@@ -543,19 +435,10 @@ public class WelcomeActivity extends AppCompatActivity {
         };
     }
 
-    private void onSignComplete(String imagePath) {
-        mRegisterButton.setText("REGISTER");
-        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
-        mSignature.setImageBitmap(bitmap);
-        mSignatureFragment.setOnSignListener(null);
-        isUserSigned = true;
-    }
-
     @Override
     protected void onDestroy() {
         mAlreadyRegisteredMenuButton.setOnClickListener(null);
         mRegisterNowMenuButton.setOnClickListener(null);
-        mRegisterButton.setOnClickListener(null);
         super.onDestroy();
     }
 }

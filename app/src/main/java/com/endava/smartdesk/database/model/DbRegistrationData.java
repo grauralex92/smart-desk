@@ -7,13 +7,16 @@ import androidx.room.PrimaryKey;
 
 @Entity
 public class DbRegistrationData {
-    @PrimaryKey
     @NonNull
     @ColumnInfo(name = "email")
     public String email;
 
+    @PrimaryKey
     @NonNull
     @ColumnInfo(name = "registration_code")
     public String registrationCode;
 
+    @NonNull
+    @ColumnInfo(name = "form_type")
+    public String formType;
 }

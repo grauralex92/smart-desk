@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/main_layouts_title_top_margin"
-        android:text="@string/guests_registration"
+        android:text="@string/summer_party_registration"
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/main_layouts_title_text_size"
@@ -57,23 +57,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/first_name" />
 
-    <AutoCompleteTextView
-        android:id="@+id/company_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/registration_fields_top_margin"
-        android:background="@color/input_background"
-        android:drawableStart="@drawable/ic_company_name"
-        android:drawablePadding="@dimen/registration_fields_drawable_padding"
-        android:hint="@string/company_name"
-        android:inputType="textCapWords"
-        android:padding="@dimen/registration_fields_padding"
-        android:textColor="@color/endava_light_orange"
-        android:textColorHint="@color/hint_color"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/last_name" />
-
     <EditText
         android:id="@+id/email_address"
         android:layout_width="match_parent"
@@ -89,17 +72,14 @@
         android:textColorHint="@color/hint_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/company_name" />
+        app:layout_constraintTop_toBottomOf="@id/last_name" />
 
-    <EditText
-        android:id="@+id/badge_number"
+    <Spinner
+        android:id="@+id/transportation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/registration_fields_top_margin"
         android:background="@color/input_background"
-        android:drawableStart="@drawable/ic_badge_number"
-        android:drawablePadding="@dimen/registration_fields_drawable_padding"
-        android:hint="@string/badge_number"
         android:inputType="text"
         android:padding="@dimen/registration_fields_padding"
         android:textColor="@color/endava_light_orange"
@@ -109,56 +89,39 @@
         app:layout_constraintTop_toBottomOf="@id/email_address" />
 
     <EditText
-        android:id="@+id/purpose"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/registration_fields_top_margin"
-        android:background="@color/input_background"
-        android:drawableStart="@drawable/ic_purpose"
-        android:drawablePadding="@dimen/registration_fields_drawable_padding"
-        android:hint="@string/purpose"
-        android:inputType="text"
-        android:padding="@dimen/registration_fields_padding"
-        android:textColor="@color/endava_light_orange"
-        android:textColorHint="@color/hint_color"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/badge_number" />
-
-    <EditText
-        android:id="@+id/arrival_date"
+        android:id="@+id/arrival_hour"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/registration_fields_top_margin"
         android:layout_marginEnd="@dimen/arrival_date_end_margin"
         android:background="@color/input_background"
-        android:drawableStart="@drawable/ic_date"
+        android:drawableStart="@drawable/ic_hour"
         android:drawablePadding="@dimen/registration_fields_drawable_padding"
-        android:hint="@string/arrival_date"
+        android:hint="@string/arrival_hour"
         android:imeOptions="actionNext"
         android:padding="@dimen/registration_fields_padding"
         android:textColor="@color/endava_light_orange"
         android:textColorHint="@color/hint_color"
-        app:layout_constraintEnd_toStartOf="@id/departure_date"
+        app:layout_constraintEnd_toStartOf="@+id/departure_hour"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/purpose" />
+        app:layout_constraintTop_toBottomOf="@+id/transportation" />
 
     <EditText
-        android:id="@+id/departure_date"
+        android:id="@+id/departure_hour"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/registration_fields_top_margin"
         android:background="@color/input_background"
-        android:drawableStart="@drawable/ic_date"
+        android:drawableStart="@drawable/ic_hour"
         android:drawablePadding="@dimen/registration_fields_drawable_padding"
-        android:hint="@string/departure_date"
         android:focusable="false"
+        android:hint="@string/departure_hour"
         android:padding="@dimen/registration_fields_padding"
         android:textColor="@color/endava_light_orange"
         android:textColorHint="@color/hint_color"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/arrival_date"
-        app:layout_constraintTop_toBottomOf="@+id/purpose" />
+        app:layout_constraintStart_toEndOf="@+id/arrival_hour"
+        app:layout_constraintTop_toBottomOf="@+id/transportation" />
 
     <TextView
         android:id="@+id/privacy_policy"
@@ -169,7 +132,7 @@
         android:textColor="@color/endava_light_orange"
         android:textStyle="italic"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/arrival_date" />
+        app:layout_constraintTop_toBottomOf="@+id/arrival_hour" />
 
     <ImageView
         android:id="@+id/signature"
@@ -194,6 +157,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signature"
         app:layout_constraintVertical_bias="1.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>
