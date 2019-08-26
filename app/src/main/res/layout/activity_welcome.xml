@@ -18,6 +18,19 @@
         app:layout_constraintStart_toEndOf="@id/leftView"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:indeterminateTint="@color/colorPrimary"
+            android:visibility="gone"/>
+
         <fragment
             android:id="@+id/registration_nav_host_fragment"
             android:name="androidx.navigation.fragment.NavHostFragment"
@@ -93,6 +106,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <include
+            android:id="@+id/form_list_menu"
+            layout="@layout/form_list_side_menu"
+            android:layout_width="@dimen/welcome_activity_side_layouts_width"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/welcome_activity_side_layouts_margins"
+            android:layout_marginEnd="@dimen/welcome_activity_side_layouts_margins"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -128,16 +154,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/smart_desk_logo" />
-
-    <ImageView
-        android:id="@+id/form_icon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="@dimen/smart_desk_logo_margins"
-        android:layout_marginTop="@dimen/smart_desk_logo_margins"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/form_icon" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

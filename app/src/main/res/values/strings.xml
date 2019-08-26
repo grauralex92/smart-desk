@@ -31,6 +31,8 @@
     <string name="register_now_menu_title">Hello, Friend!</string>
     <string name="register_now_menu_description">Enter your personal details and start the journey with us.</string>
     <string name="register_now_menu_button">REGISTER NOW</string>
+    <string name="form_list_side_menu_title">Forms List</string>
+    <string name="form_list_side_menu_description">Please choose the desired registration form.</string>
 
     <!-- Signature Fragment -->
     <string name="signature_cancel_button">Cancel</string>
