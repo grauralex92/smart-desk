@@ -1,7 +1,6 @@
 package com.endava.smartdesk.view.activities;
 
 import android.animation.Animator;
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
@@ -13,14 +12,18 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.endava.smartdesk.R;
+import com.endava.smartdesk.adapters.FormsAdapter;
 import com.endava.smartdesk.database.DbInitialization;
 import com.endava.smartdesk.database.SmartDeskDataBase;
 import com.endava.smartdesk.database.model.DbRegistrationData;
@@ -34,6 +37,7 @@ import com.endava.smartdesk.utils.UserDataMapper;
 import com.endava.smartdesk.view.fragments.BaseRegistrationFragment;
 import com.facebook.stetho.Stetho;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -70,14 +74,32 @@ public class WelcomeActivity extends AppCompatActivity {
     @BindView(R.id.already_registered_menu_button)
     Button mAlreadyRegisteredMenuButton;
 
+    @BindView(R.id.change_form_menu_button)
+    Button mChangeFormMenuButton;
+
+    @BindView(R.id.form_list_side_menu_button)
+    Button mFormListMenuButton;
+
     @BindView(R.id.register_now_menu_button)
     Button mRegisterNowMenuButton;
 
     @BindView(R.id.continue_button)
     Button mContinueButton;
 
-    @BindView(R.id.form_icon)
-    ImageView mFormIcon;
+    @BindView(R.id.smart_desk_logo)
+    ImageView mLogo;
+
+    @BindView(R.id.already_registered_menu)
+    View mAlreadyRegisteredMenu;
+
+    @BindView(R.id.form_list_menu)
+    View mFormListMenu;
+
+    @BindView(R.id.form_list_side_recycler_view)
+    RecyclerView mFormsRecyclerView;
+
+    @BindView(R.id.progress_bar)
+    ProgressBar mProgressBar;
 
     private NavHostFragment mNestedNav;
     public static SmartDeskDataBase mDb;
@@ -86,6 +108,8 @@ public class WelcomeActivity extends AppCompatActivity {
     private boolean isUserAlreadyRegistered;
     private RetrofitClient retrofitClient;
     private UserDataMapper mUserDataMapper;
+    private FormsAdapter mAdapter;
+    private Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +119,7 @@ public class WelcomeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initDB();
         initViews();
+        initAdapter();
         setupKeyboard(mView);
     }
 
@@ -111,34 +136,134 @@ public class WelcomeActivity extends AppCompatActivity {
             }
             return false;
         });
-        mFormIcon.setOnClickListener(view -> displayFormDialog());
+        mChangeFormMenuButton.setOnClickListener(view -> flipLeftView(true, ""));
+        mFormListMenuButton.setOnClickListener(view -> flipLeftView(false, ""));
+        mAdapter.setOnMyItemClickListener(this::flipLeftView);
     }
 
-    private void displayFormDialog() {
-        int i = 0;
-        String[] forms = new String[RegistrationForm.values().length];
+    private void flipLeftView(boolean displayFormList, String formName) {
+        mLeftView.animate()
+                .scaleYBy(1.3f)
+                .rotationY(90)
+                .setDuration(500)
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animator) {
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        mLeftView.setRotationY(-90);
+                        mLeftView.animate()
+                                .scaleYBy(0.7f)
+                                .rotationY(0)
+                                .setDuration(500)
+                                .setListener(null)
+                                .start();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animator) {
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animator) {
+                    }
+                })
+                .start();
+        mLeftInfo.animate()
+                .rotationY(90)
+                .setDuration(500)
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animator) {
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        mLeftInfo.setRotationY(-90);
+                        if (displayFormList) {
+                            mAlreadyRegisteredMenu.setVisibility(View.INVISIBLE);
+                            mFormListMenu.setVisibility(View.VISIBLE);
+                        } else {
+                            mAlreadyRegisteredMenu.setVisibility(View.VISIBLE);
+                            mFormListMenu.setVisibility(View.INVISIBLE);
+                        }
+                        mLeftInfo.animate()
+                                .rotationY(0)
+                                .setDuration(500)
+                                .setListener(new Animator.AnimatorListener() {
+                                    @Override
+                                    public void onAnimationStart(Animator animator) {
+                                        if (!displayFormList && !formName.isEmpty()) {
+                                            if (isDifferentFormDisplayed(formName)) {
+                                                mProgressBar.setVisibility(View.VISIBLE);
+                                                mNestedNav.getView().setVisibility(View.INVISIBLE);
+                                                changeForm(formName);
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onAnimationEnd(Animator animator) {
+                                        if (!displayFormList && !formName.isEmpty()) {
+                                            if (!isDifferentFormDisplayed(formName)) {
+                                                mNestedNav.getView().setVisibility(View.VISIBLE);
+                                                mProgressBar.setVisibility(View.GONE);
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onAnimationCancel(Animator animator) {
+
+                                    }
+
+                                    @Override
+                                    public void onAnimationRepeat(Animator animator) {
+
+                                    }
+                                })
+                                .start();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animator) {
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animator) {
+                    }
+                })
+                .start();
+    }
+
+    private void initAdapter() {
+        mAdapter = new FormsAdapter();
+        mFormsRecyclerView.setAdapter(mAdapter);
+        mFormsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        List<String> formsList = new ArrayList<>();
         for (RegistrationForm form : RegistrationForm.values()) {
-            forms[i] = form.getFormName();
-            i++;
+            formsList.add(form.getFormName());
         }
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(WelcomeActivity.this, R.style.AlertDialogStyle);
-        builder.setTitle(getResources().getString(R.string.registration_form_dialog_title));
-        builder.setItems(forms, (dialog, which) ->
-                changeForm(forms[which]));
-        builder.show();
+        mAdapter.setData(formsList);
     }
 
-    private void changeForm(String formName) {
-        if (formName.equals(RegistrationForm.GUEST_FORM.getFormName())) {
-            navigateToNewRegistrationForm(R.id.action_global_guestRegistrationFragment,
-                    R.id.guestRegistrationFragment);
-        } else if (formName.equals(RegistrationForm.INNOVATION_LABS_FORM.getFormName())) {
-            navigateToNewRegistrationForm(R.id.action_global_innovationLabsRegistrationFragment,
-                    R.id.innovationLabsRegistrationFragment);
-        } else if (formName.equals(RegistrationForm.SUMMER_PARTY_FORM.getFormName())) {
-            navigateToNewRegistrationForm(R.id.action_global_summerPartyRegistrationFragment,
-                    R.id.summerPartyRegistrationFragment);
+
+    private void changeForm(String formType) {
+        switch (formType) {
+            case "Guest Registration Form":
+                Navigation.findNavController(findViewById(R.id.registration_nav_host_fragment))
+                        .navigate(R.id.action_global_guestRegistrationFragment);
+                break;
+            case "Summer Party Registration Form":
+                Navigation.findNavController(findViewById(R.id.registration_nav_host_fragment))
+                        .navigate(R.id.action_global_summerPartyRegistrationFragment);
+                break;
+            case "Innovation Labs Registration Form":
+                Navigation.findNavController(findViewById(R.id.registration_nav_host_fragment))
+                        .navigate(R.id.action_global_innovationLabsRegistrationFragment);
+                break;
         }
     }
 
@@ -148,6 +273,29 @@ public class WelcomeActivity extends AppCompatActivity {
             Navigation.findNavController(findViewById(R.id.registration_nav_host_fragment))
                     .navigate(actionId);
         }
+    }
+
+    private boolean isDifferentFormDisplayed(String formType) {
+        boolean isDifferent = true;
+        int currentFragment = mNestedNav.getNavController().getCurrentDestination().getId();
+        switch (formType) {
+            case "Guest Registration Form":
+                if (currentFragment != R.id.guestRegistrationFragment) {
+                    isDifferent = false;
+                }
+                break;
+            case "Summer Party Registration Form":
+                if (currentFragment != R.id.summerPartyRegistrationFragment) {
+                    isDifferent = false;
+                }
+                break;
+            case "Innovation Labs Registration Form":
+                if (currentFragment != R.id.innovationLabsRegistrationFragment) {
+                    isDifferent = false;
+                }
+                break;
+        }
+        return !isDifferent;
     }
 
     public void setupKeyboard(View view) {
@@ -178,8 +326,7 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     void startViewAnimation(View view, Animator.AnimatorListener animatorListener, int duration, int delay, float x) {
-        final Handler handler = new Handler();
-        handler.postDelayed(() -> view.animate()
+        mHandler.postDelayed(() -> view.animate()
                 .translationXBy(x)
                 .setDuration(duration)
                 .setListener(animatorListener)
@@ -202,12 +349,12 @@ public class WelcomeActivity extends AppCompatActivity {
                 400, leftInfoDelay, flag * mScreenWidthInPixels / 14);
         startViewAnimation(mRightInfo, getRightInfoAnimatorListener(flag),
                 400, rightInfoDelay, flag * mScreenWidthInPixels / 14);
-        startViewAnimation(mFormIcon, null, 400, leftInfoDelay, -flag * mScreenWidthInPixels / 14);
     }
 
     private void initViews() {
         mNestedNav = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.registration_nav_host_fragment);
         mUserDataMapper = new UserDataMapper();
+        mHandler = new Handler();
 
         Display display = getWindowManager().getDefaultDisplay();
         DisplayMetrics outMetrics = new DisplayMetrics();
@@ -437,8 +584,10 @@ public class WelcomeActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        super.onDestroy();
         mAlreadyRegisteredMenuButton.setOnClickListener(null);
         mRegisterNowMenuButton.setOnClickListener(null);
-        super.onDestroy();
+        mUserDataMapper = null;
+        mHandler = null;
     }
 }
