@@ -1,54 +1,21 @@
 <resources>
-    <string name="app_name">Smart Desk</string>
-
-    <!-- Registration Successful Activity -->
-    <string name="registration_successful_details">Thank you for registering on our SmartDesk application. You will soon receive an email with an access token and with all the details needed for logging in myEndava Application.\nWe hope that you will find all the needed information there and that you will have a great time at our company!</string>
-    <string name="registration_successful">REGISTRATION SUCCESSFUL</string>
-
-    <!-- Already Registered-->
-    <string name="already_registered">Already registered</string>
-    <string name="continue_button_text">CONTINUE</string>
-    <string name="authentication_code">Registration code</string>
-    <string name="already_registered_indication">Please enter the authentication code that we provided on your email address.</string>
-    <string name="already_registered_description">By filling out this form and clicking continue, you will be taken to the registration form and all your data will be prepopulated. Please verify that all information is correct before submitting the registration form.</string>
-
-    <!-- Register Now -->
-    <string name="register_button_text">Get Signature</string>
-    <string name="guests_registration">Guests Registration</string>
-    <string name="first_name">First name</string>
-    <string name="last_name">Last name</string>
-    <string name="company_name">Company name</string>
-    <string name="email_address">Email address</string>
-    <string name="arrival_date">Arrival date</string>
-    <string name="tShirtSize">Purpose</string>
-    <string name="departure_date">Departure date</string>
-    <string name="privacy_policy">By filling out this form and clicking register, you agree to our privacy policy.</string>
-
-    <!-- Side Layouts -->
-    <string name="already_registered_menu_title">Welcome, Friend!</string>
-    <string name="already_registered_menu_description">In order to have an easier and faster registration, please us the authentication code that you received on your email.</string>
-    <string name="already_registered_menu_button">ALREADY REGISTERED</string>
-    <string name="register_now_menu_title">Hello, Friend!</string>
-    <string name="register_now_menu_description">Enter your personal details and start the journey with us.</string>
-    <string name="register_now_menu_button">REGISTER NOW</string>
-    <string name="form_list_side_menu_title">Forms List</string>
-    <string name="form_list_side_menu_description">Please choose the desired registration form.</string>
-
-    <!-- Signature Fragment -->
-    <string name="signature_cancel_button">Cancel</string>
-    <string name="signature_clear_button">Clear</string>
-    <string name="signature_save_button">Save</string>
-
-
-    <string name="badge_number">Badge Number</string>
-    <string name="summer_party_registration">Summer Party Registration</string>
-    <string name="transportation">Transportation</string>
-    <string name="arrival_hour">Arrival Hour</string>
-    <string name="departure_hour">Departure Hour</string>
-    <string name="innovation_labs_registration">Innovation Labs Registration</string>
-    <string name="team_name">Team Name</string>
-    <string name="tshirt_size">T-Shirt Size</string>
-
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="registration_form_dialog_title">Please select a registration form</string>
+    <string name="app_name">SmartDesk</string>
+    
+    <string name="office_country">Office country</string>
+    <string name="office_city">Office city</string>
+    <string name="office_name">Office name</string>
+    <string name="date">Date</string>
+    <string name="name">Name</string>
+    <string name="surname">Surname</string>
+    <string name="company">Company</string>
+    <string name="date_visit">Visit date</string>
+    <string name="time_arrival">Arrival time</string>
+    <string name="host_employee">Endava host employee</string>
+    <string name="card_no">Visitor card no.</string>
+    <string name="date_departure">Departure date</string>
+    <string name="time_departure">Departure time</string>
+    <string name="signature_visitor">Visitor signature</string>
+    <string name="signature_host">Signature of the OM/Endava host</string>
+    <string name="visitor_register">Visitor register</string>
+    <string name="terms_acceptance">Please ensure that you have read and understood the Endava "Physical Security Policy" and "Emergency Guidelines" sheets.</string>
 </resources>
